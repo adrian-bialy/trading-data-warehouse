@@ -1,0 +1,41 @@
+name: Lint and Test
+run-name: "${{ github.event_name }}: Test (${{ github.ref_name }})"
+
+on:
+  push:
+    branches:
+      - develop
+      - release/*
+  pull_request:
+    branches:
+      - develop
+      - fix/*
+      - hotfix/*
+      - release/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Run Lint
+        run: poetry run make lint  # see [Makefile](Makefile)
+
+      - name: Run Flake8
+        run: poetry run make flake
+
+      - name: Run Tests
+        run: poetry run make test
