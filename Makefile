@@ -10,5 +10,8 @@ black:
 test:
 	pytest --maxfail=0 --disable-warnings -q
 
+git-squash:
+	git reset --soft origin/develop
+
 precommit:
 	make black lint flake test
