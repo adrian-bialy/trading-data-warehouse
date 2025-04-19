@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "trading-data-warehouse"
+version = "0.1.0"
+description = "Trading Data Warehouse"
+authors = ["Adrian Biały <adrian.bialy@airlab.me>"]
+packages = [{ include = "tdw", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyspark = "~3.5.5"
+requests = "~2.32.3"
+PyYAML = "~6.0.2"
+python-dotenv = "~1.1.0"
+psycopg2-binary = "~2.9.10"
+pytest = "~8.3.5"
+black = "~25.1.0"
+flake8 = "~7.2.0"
+pylint = "~3.3.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

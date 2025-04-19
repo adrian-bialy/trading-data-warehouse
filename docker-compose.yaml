@@ -1,0 +1,16 @@
+services:
+  warehouse:
+    build:
+      context: .
+      dockerfile: Dockerfile.warehouse
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tdw}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-tdw}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
