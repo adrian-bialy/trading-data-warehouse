@@ -1,0 +1,78 @@
+name: Release
+run-name: "${{ github.event_name }}: Release (${{ github.ref_name }})"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+          poetry install
+
+      - name: Run Lint
+        run: poetry run make lint
+
+      - name: Run Flake8
+        run: poetry run make flake
+
+      - name: Run Tests
+        run: poetry run make test
+
+  extract-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract version from branch
+        id: extract_version
+        run: |
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          echo "version=${BRANCH_NAME##release/}" >> $GITHUB_OUTPUT
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+
+  bump-version:
+    runs-on: ubuntu-latest
+    needs: [build, extract-version]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Bump Version
+        run: |
+          NEW_VERSION="${{ needs.extract-version.outputs.version }}"
+          poetry version $NEW_VERSION
+          git add pyproject.toml
+          git commit -m "Release to $NEW_VERSION"
+          git push origin main
+
+  create-tag:
+    runs-on: ubuntu-latest
+    needs: bump-version
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from branch
+        id: extract_version
+        run: |
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          echo "version=${BRANCH_NAME##release/}" >> $GITHUB_OUTPUT
+
+      - name: Create Git Tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag -a "v${{ steps.extract_version.outputs.version }}" -m "Release ${{ steps.extract_version.outputs.version }}"
+          git push origin "v${{ steps.extract_version.outputs.version }}"
