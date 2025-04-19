@@ -1,0 +1,18 @@
+# The 'sources' section defines configuration for data sources used in the application.
+#
+# 'rapid_yahoo' specifies settings for the Yahoo data source, including:
+#   - 'enabled': Boolean flag to determine if the data source is active.
+#   - 'datasets': A collection of dataset configurations provided by the data source.
+#
+# Inside 'datasets', the 'tickers' entry defines:
+#   - 'name': Identifier for the dataset.
+#   - 'enabled': Boolean flag to indicate if this dataset should be utilized.
+#   - 'transform': Boolean indicator to specify whether data transformation is applied.
+sources:
+  rapid_yahoo:
+    enabled: true
+    datasets:
+      tickers:
+        name: tickers
+        enabled: true
+        transform: false

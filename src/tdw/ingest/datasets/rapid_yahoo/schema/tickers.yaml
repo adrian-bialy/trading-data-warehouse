@@ -1,0 +1,23 @@
+name: tickers
+responsePath: body
+pagination:
+  enabled: true
+  maxPages: 2
+
+columns:
+  - name: symbol
+    type: string
+  - name: name
+    type: string
+  - name: lastsale
+    type: string
+  - name: netchange
+    type: double
+  - name: pctchange
+    type: string
+  - name: marketCap
+    type: string
+  - name: _rowHash
+    type: string
+  - name: _processedTimestamp
+    type: timestamp
