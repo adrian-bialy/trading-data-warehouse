@@ -1,0 +1,10 @@
+name: rapid_yahoo
+variables:
+  base_url: "https://yahoo-finance15.p.rapidapi.com/api/"
+  timeout: 30
+  retry_attempts: 3
+
+headers:
+  rapidapi:
+    x-rapidapi-key: "{api_key}"
+    x-rapidapi-host: "yahoo-finance15.p.rapidapi.com"

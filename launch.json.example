@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Ingest: Yahoo Tickers",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "tdw.main",
+            "args": [
+                "--dataset",
+                "rapid_yahoo.tickers",
+                "--action",
+                "ingest"
+            ],
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

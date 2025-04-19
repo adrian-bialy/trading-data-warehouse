@@ -1,0 +1,33 @@
+{
+    "name": "Dev Container",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+    "runArgs": [
+        "--privileged",
+        "--volume=/var/run/docker.sock:/var/run/docker.sock",
+        "--add-host=host.docker.internal:host-gateway"
+    ],
+    "remoteUser": "devuser",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "github.copilot",
+                "ms-python.python",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash",
+                        "args": []
+                    }
+                },
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    "onCreateCommand": "poetry install",
+    "postCreateCommand": "/bin/bash -l -c 'poetry shell'"
+}
