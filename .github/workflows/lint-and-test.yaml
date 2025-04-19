@@ -2,6 +2,10 @@ name: Lint and Test
 run-name: "${{ github.event_name }}: Test (${{ github.ref_name }})"
 
 on:
+  push:
+    branches:
+      - develop
+      - release/*
   pull_request:
     branches:
       - develop
