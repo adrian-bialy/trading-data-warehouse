@@ -219,6 +219,7 @@ class BaseIngestor:
 
         query_params = self.query_params
         # TODO: Process requests on worker nodes
+        # TODO: Verify if API response is successful and handle errors
         if pagination["enabled"]:
             result = self._paginate(full_url, headers, query_params, result_path, pagination.get("maxPages", None))
         else:
