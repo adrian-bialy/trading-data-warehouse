@@ -10,6 +10,9 @@ black:
 test:
 	pytest --maxfail=0 --disable-warnings -q
 
+coverage:
+	pytest --cov=src --cov-report=term-missing
+
 git-squash:
 	git reset --soft origin/develop
 
