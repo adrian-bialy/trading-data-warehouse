@@ -61,6 +61,11 @@ jobs:
           pip install poetry
           poetry install
 
+      - name: Set Git Identity
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
       - name: Bump Version
         run: |
           NEW_VERSION="${{ needs.extract-version.outputs.version }}"
