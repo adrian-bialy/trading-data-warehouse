@@ -45,7 +45,7 @@ jobs:
       - name: Extract version from branch
         id: extract_version
         run: |
-          BRANCH_NAME="${GITHUB_EVENT_PULL_REQUEST_HEAD_REF:-${GITHUB_REF##*/}}"
+          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}"
           VERSION="${BRANCH_NAME##release/}"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
