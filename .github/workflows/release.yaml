@@ -1,4 +1,5 @@
 name: Release Tag
+run-name: "${{ github.event_name }}: Release (${{ github.ref_name }})"
 
 on:
   pull_request:
@@ -22,9 +23,11 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Create Git Tag
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           TAG="v${{ steps.extract_version.outputs.version }}"
           git tag -a "$TAG" -m "Release ${{ steps.extract_version.outputs.version }}"
-          git push origin "$TAG"
+          git push https://x-access-token:${GH_TOKEN}@github.com/adrian-bialy/trading-data-warehouse.git "$TAG"
