@@ -115,7 +115,7 @@ Thank you for your interest in contributing to Trading Data Warehouse! We welcom
   ```sh
   make black lint flake
   ```
-### Before commiting
+### Before committing
   You can combine lint and test with the command:
   ```sh
   make precommit
