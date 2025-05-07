@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "trading-data-warehouse"
-version = "0.1.1"
+version = "0.1.2"
 description = "Trading Data Warehouse"
 authors = ["Adrian Biały <adrian.bialy@airlab.me>"]
 packages = [{ include = "tdw", from = "src" }]
