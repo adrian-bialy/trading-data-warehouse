@@ -1,0 +1,26 @@
+name: history_1mo
+responsePath: body
+pagination:
+  enabled: false
+
+columns:
+  - name: symbol
+    type: string
+  - name: date
+    type: string
+  - name: date_utc
+    type: integer
+  - name: open
+    type: string
+  - name: high
+    type: string
+  - name: low
+    type: string
+  - name: close
+    type: string
+  - name: volume
+    type: long
+  - name: _rowHash
+    type: string
+  - name: _processedTimestamp
+    type: timestamp

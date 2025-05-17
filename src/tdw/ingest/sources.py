@@ -72,7 +72,58 @@ def load_sources():
             dependency=None,
             datasets=[
                 Dataset(
-                    name="tickers", dependency=None, endpoint="v2/markets/tickers", query_params={"type": "STOCKS"}
+                    name="tickers",
+                    dependency=None,
+                    endpoint="v2/markets/tickers",
+                    query_params={"type": "STOCKS"},
+                ),
+                Dataset(
+                    name="history_1m",
+                    dependency="tickers",
+                    endpoint="v1/markets/stock/history",
+                    query_params={"symbol": "{symbol}", "interval": "1m"},
+                ),
+                Dataset(
+                    name="history_5m",
+                    dependency="tickers",
+                    endpoint="v1/markets/stock/history",
+                    query_params={"symbol": "{symbol}", "interval": "5m"},
+                ),
+                Dataset(
+                    name="history_15m",
+                    dependency="tickers",
+                    endpoint="v1/markets/stock/history",
+                    query_params={"symbol": "{symbol}", "interval": "15m"},
+                ),
+                Dataset(
+                    name="history_30m",
+                    dependency="tickers",
+                    endpoint="v1/markets/stock/history",
+                    query_params={"symbol": "{symbol}", "interval": "30m"},
+                ),
+                Dataset(
+                    name="history_1d",
+                    dependency="tickers",
+                    endpoint="v1/markets/stock/history",
+                    query_params={"symbol": "{symbol}", "interval": "1d"},
+                ),
+                Dataset(
+                    name="history_1wk",
+                    dependency="tickers",
+                    endpoint="v1/markets/stock/history",
+                    query_params={"symbol": "{symbol}", "interval": "1wk"},
+                ),
+                Dataset(
+                    name="history_1mo",
+                    dependency="tickers",
+                    endpoint="v1/markets/stock/history",
+                    query_params={"symbol": "{symbol}", "interval": "1mo"},
+                ),
+                Dataset(
+                    name="history_3mo",
+                    dependency="tickers",
+                    endpoint="v1/markets/stock/history",
+                    query_params={"symbol": "{symbol}", "interval": "3mo"},
                 ),
             ],
         ),
