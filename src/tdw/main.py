@@ -59,31 +59,30 @@ logger.addHandler(handler)
 
 def ingest(dataset_name: str):
     """
-    Ingests data for a specified dataset from configured sources.
+    Ingest data for the specified dataset from configured sources into the bronze layer.
 
     This function performs the following steps:
-        1. Loads the global input configuration using ConfigLoader.
-        2. Retrieves all available sources and filters them based on the input
-           configuration and the specified dataset name.
-        3. For each source, loads its specific configuration and updates the source
-           to use BaseAPIAuth with its dedicated settings.
-        4. Checks if any sources are available; if none are found, logs a warning
-           and exits the program.
-        5. Initializes a SparkSession and a PostgresAuth target for managing output.
-        6. For each source and each of its datasets:
-             - Retrieves source-specific and dataset-specific configurations.
-             - Replaces any occurrences of '{api_key}' in the configuration with the
-               corresponding environment variable value. Raises a ValueError if the
-               required environment variable is missing.
-             - Logs the ingestion process for the current source and dataset.
-             - Executes a data processing chain: read, process, and write operations.
-        7. Closes the database connection after all processing is complete.
+    1. Loads the global input configuration.
+    2. Retrieves all available sources and filters them based on the input config and
+        the provided dataset_name.
+    3. Loads and applies per-source authentication configuration.
+    4. Exits gracefully if no sources match the dataset.
+    5. Initializes a SparkSession and a Postgres target connection.
+    6. For each source and its datasets:
+        a. Retrieves source- and dataset-specific settings.
+        b. Substitutes any `{api_key}` placeholders in the source configuration with
+            environment variable values (e.g. `MY_SOURCE_KEY`).
+        c. Executes the ETL pipeline: read(), process(), write() into the "bronze" layer.
+    7. Closes the Postgres connection upon completion.
 
-    Parameters:
-        dataset_name (str): The name of the dataset to be ingested.
+    Args:
+         dataset_name (str): The name of the dataset to ingest.
 
     Raises:
-        ValueError: If the required environment variable for a source's API key is not found.
+         ValueError: If the expected environment variable for a source API key
+                         (e.g. `<SOURCE_NAME>_KEY`) is not set.
+         SystemExit: If no matching sources are found for the specified dataset,
+                         exits with status code 0.
     """
     cl = ConfigLoader()
     input_config = cl.load_input_config()
@@ -123,6 +122,7 @@ def ingest(dataset_name: str):
                 source_config,
                 dataset_config,
                 dataset.endpoint,
+                dataset.dependency,
                 target,
                 "bronze",
                 dataset.query_params,
