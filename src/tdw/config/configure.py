@@ -54,7 +54,9 @@ class ConfigLoader:
             FileNotFoundError: If the configuration file is not found at self.input_config_path.
         """
         if not os.path.exists(self.input_config_path):
-            raise FileNotFoundError(f"Configuration file not found: {self.input_config_path}")
+            raise FileNotFoundError(
+                f"Configuration file not found: {self.input_config_path}"
+            )
 
         with open(self.input_config_path, "r", encoding="utf-8") as f:
             self.input_config = yaml.safe_load(f)
@@ -86,7 +88,9 @@ class ConfigLoader:
             "config.yaml",
         )
         if not os.path.exists(source_config_path):
-            raise FileNotFoundError(f"Source configuration file not found: {source_config_path}")
+            raise FileNotFoundError(
+                f"Source configuration file not found: {source_config_path}"
+            )
 
         with open(source_config_path, "r", encoding="utf-8") as f:
             source_config = yaml.safe_load(f)

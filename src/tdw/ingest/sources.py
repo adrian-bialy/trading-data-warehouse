@@ -129,8 +129,8 @@ def load_sources():
                     name="quotes",
                     dependency="tickers",
                     endpoint="v1/markets/quote",
-                    query_params={"ticker":"{symbol}","type":"STOCKS"}
-                )
+                    query_params={"ticker": "{symbol}", "type": "STOCKS"},
+                ),
             ],
         ),
     ]

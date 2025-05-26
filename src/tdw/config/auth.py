@@ -78,7 +78,11 @@ class PostgresAuth:
 
         self._conn = self.get_connection()
 
-        self.connection_properties = {"user": self.user, "password": self.password, "driver": "org.postgresql.Driver"}
+        self.connection_properties = {
+            "user": self.user,
+            "password": self.password,
+            "driver": "org.postgresql.Driver",
+        }
 
     def get_connection(self):
         """
