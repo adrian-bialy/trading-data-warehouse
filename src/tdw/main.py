@@ -112,14 +112,10 @@ def ingest(dataset_name: str):
         if api_key_value:
             source_config = replace_api_key(source_config, api_key_value)
         else:
-            raise ValueError(
-                f"Variable {source.name.upper()}_KEY not found in environment variables."
-            )
+            raise ValueError(f"Variable {source.name.upper()}_KEY not found in environment variables.")
 
         for dataset in source.datasets:
-            dataset_config = input_source_config.get("datasets", {}).get(
-                dataset.name, {}
-            )
+            dataset_config = input_source_config.get("datasets", {}).get(dataset.name, {})
             logger.info("Ingesting %s.%s", source.name, dataset.name)
             source.process(
                 spark,
