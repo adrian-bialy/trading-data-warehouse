@@ -180,10 +180,28 @@ class BaseIngestor:
         return self.dependency_df
 
     def _extract_results(self, raw):
-        # if the API gave us a dict, take its values
+        if isinstance(raw,list):
+            return raw
+        # if the API gave us a dict, flatten nested dict
+        else:
+            results = []
+            if isinstance(raw, dict):
+                flat = self._flatten_nested_dict(raw)
+                results.append(flat)
+        return results
+        
+
+    def _flatten_nested_dict(self, raw, prefix="",data=None):
+        if data is None:
+            data = {}
+
         if isinstance(raw, dict):
-            return list(raw.values())
-        return raw
+            for key, value in raw.items():
+                self._flatten_nested_dict(value,f"{prefix}_{key}" if prefix else key, data)
+        else:
+            data[prefix] = raw
+                
+        return data
 
     def _paginate(
         self, full_url: str, headers: dict, query_params: dict, result_path: str, max_pages: int = None
