@@ -1,0 +1,84 @@
+name: quotes
+responsePath: body
+pagination:
+  enabled: true
+  maxPages: 1
+
+columns:
+  - name: symbol
+    type: string
+  - name: companyName
+    type: string
+  - name: stockType
+    type: string
+  - name: exchange
+    type: string
+  - name: marketStatus
+    type: string
+  - name: assetClass
+    type: string
+  # primaryData (flattened)
+  - name: primaryData_lastSalePrice
+    type: string
+  - name: primaryData_netChange
+    type: string
+  - name: primaryData_percentageChange
+    type: string
+  - name: primaryData_deltaIndicator
+    type: string
+  - name: primaryData_lastTradeTimestamp
+    type: string
+  - name: primaryData_isRealTime
+    type: boolean
+  - name: primaryData_bidPrice
+    type: string
+  - name: primaryData_askPrice
+    type: string
+  - name: primaryData_bidSize
+    type: string
+  - name: primaryData_askSize
+    type: string
+  - name: primaryData_volume
+    type: string
+  - name: primaryData_currency
+    type: string
+  # secondaryData (flattened)
+  - name: secondaryData_lastSalePrice
+    type: string
+  - name: secondaryData_netChange
+    type: string
+  - name: secondaryData_percentageChange
+    type: string
+  - name: secondaryData_deltaIndicator
+    type: string
+  - name: secondaryData_lastTradeTimestamp
+    type: string
+  - name: secondaryData_isRealTime
+    type: boolean
+  - name: secondaryData_bidPrice
+    type: string
+  - name: secondaryData_askPrice
+    type: string
+  - name: secondaryData_bidSize
+    type: string
+  - name: secondaryData_askSize
+    type: string
+  - name: secondaryData_volume
+    type: string
+  - name: secondaryData_currency
+    type: string
+  # keyStats_fiftyTwoWeekHighLow (flattened)
+  - name: keyStats_fiftyTwoWeekHighLow_label
+    type: string
+  - name: keyStats_fiftyTwoWeekHighLow_value
+    type: string
+  # keyStats_dayrange (flattened)
+  - name: keyStats_dayrange_label
+    type: string
+  - name: keyStats_dayrange_value
+    type: string
+  #metada columns
+  - name: _rowHash
+    type: string
+  - name: _processedTimestamp
+    type: timestamp
