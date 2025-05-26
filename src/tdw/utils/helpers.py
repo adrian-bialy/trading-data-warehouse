@@ -18,11 +18,7 @@ def filter_sources(sources, config):
         source_config = config.get("sources", {}).get(source.name, {})
         if source_config.get("enabled", False):
             datasets_config = source_config.get("datasets", {})
-            source.datasets = [
-                d
-                for d in source.datasets
-                if datasets_config.get(d.name, {}).get("enabled", False)
-            ]
+            source.datasets = [d for d in source.datasets if datasets_config.get(d.name, {}).get("enabled", False)]
             enabled_sources.append(source)
     return enabled_sources
 
@@ -44,9 +40,7 @@ def filter_datasets(sources, dataset_name):
         filtered_sources = []
         for source in sources:
             if source.name == source_filter:
-                filtered_datasets = [
-                    ds for ds in source.datasets if ds.name == dataset_filter
-                ]
+                filtered_datasets = [ds for ds in source.datasets if ds.name == dataset_filter]
                 if filtered_datasets:
                     source.datasets = filtered_datasets
                     filtered_sources.append(source)
