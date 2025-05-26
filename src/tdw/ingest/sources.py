@@ -125,6 +125,12 @@ def load_sources():
                     endpoint="v1/markets/stock/history",
                     query_params={"symbol": "{symbol}", "interval": "3mo"},
                 ),
+                Dataset(
+                    name="quotes",
+                    dependency="tickers",
+                    endpoint="v1/markets/quote",
+                    query_params={"ticker":"{symbol}","type":"STOCKS"}
+                )
             ],
         ),
     ]
