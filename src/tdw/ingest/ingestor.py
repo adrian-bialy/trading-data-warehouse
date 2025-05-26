@@ -72,9 +72,7 @@ class BaseIngestor:
         self.query_params_list = None
         self.df = None
 
-        self.schema_path = (
-            f"src/tdw/ingest/datasets/{self.source_config['name']}/schema/{self.dataset_config['name']}.yaml"
-        )
+        self.schema_path = f"src/tdw/ingest/datasets/{self.source_config['name']}/schema/{self.dataset_config['name']}.yaml"
         self.schema = self.__get_schema()
         self.result_path = self.__get_result_path()
         self.pagination = self.__get_pagination_config()
@@ -117,7 +115,11 @@ class BaseIngestor:
                 col_type = column.get("type")
                 if col_type in ("dict", "dictionary", "list") and "columns" in column:
                     nested_schema = build_schema(column)
-                    field_type = ArrayType(nested_schema) if col_type == "list" else nested_schema
+                    field_type = (
+                        ArrayType(nested_schema)
+                        if col_type == "list"
+                        else nested_schema
+                    )
                 else:
                     field_type = type_mapping.get(col_type, StringType())
                 fields.append(StructField(col_name, field_type, True))
@@ -175,12 +177,14 @@ class BaseIngestor:
             jdbc_url = self.target.jdbc_url
             connection_properties = self.target.connection_properties
 
-            self.dependency_df = self.spark.read.jdbc(url=jdbc_url, table=table_name, properties=connection_properties)
+            self.dependency_df = self.spark.read.jdbc(
+                url=jdbc_url, table=table_name, properties=connection_properties
+            )
 
         return self.dependency_df
 
     def _extract_results(self, raw):
-        if isinstance(raw,list):
+        if isinstance(raw, list):
             return raw
         # if the API gave us a dict, flatten nested dict
         else:
@@ -189,22 +193,28 @@ class BaseIngestor:
                 flat = self._flatten_nested_dict(raw)
                 results.append(flat)
         return results
-        
 
-    def _flatten_nested_dict(self, raw, prefix="",data=None):
+    def _flatten_nested_dict(self, raw, prefix="", data=None):
         if data is None:
             data = {}
 
         if isinstance(raw, dict):
             for key, value in raw.items():
-                self._flatten_nested_dict(value,f"{prefix}_{key}" if prefix else key, data)
+                self._flatten_nested_dict(
+                    value, f"{prefix}_{key}" if prefix else key, data
+                )
         else:
             data[prefix] = raw
-                
+
         return data
 
     def _paginate(
-        self, full_url: str, headers: dict, query_params: dict, result_path: str, max_pages: int = None
+        self,
+        full_url: str,
+        headers: dict,
+        query_params: dict,
+        result_path: str,
+        max_pages: int = None,
     ) -> list:
         """
         Paginates through results by incrementing the 'page' query parameter until no results are returned.
@@ -236,7 +246,9 @@ class BaseIngestor:
             try:
                 data = response.json()
             except requests.exceptions.JSONDecodeError as exc:
-                raise ValueError(f"Failed to decode JSON on page {page}. Response text: {response.text}") from exc
+                raise ValueError(
+                    f"Failed to decode JSON on page {page}. Response text: {response.text}"
+                ) from exc
 
             page_result = self._extract_results(data.get(result_path, []))
             if not page_result:
@@ -275,7 +287,11 @@ class BaseIngestor:
                 if isinstance(val, str) and val.startswith("{") and val.endswith("}")
             }
             # keep the rest as static
-            static_params = {key: val for key, val in self.query_params.items() if key not in placeholders}
+            static_params = {
+                key: val
+                for key, val in self.query_params.items()
+                if key not in placeholders
+            }
 
             query_params_list = []
             if placeholders:
@@ -331,7 +347,9 @@ class BaseIngestor:
         query_params_list = self._get_query_params_list()
         # figure out which query‐params were placeholders (e.g. "{symbol}")
         placeholder_keys = [
-            k for k, v in self.query_params.items() if isinstance(v, str) and v.startswith("{") and v.endswith("}")
+            k
+            for k, v in self.query_params.items()
+            if isinstance(v, str) and v.startswith("{") and v.endswith("}")
         ]
         query_params_list = query_params_list[:2]
         all_results = []
@@ -353,7 +371,9 @@ class BaseIngestor:
                     timeout=self.source_config.get("variables", {}).get("timeout", 30),
                 )
                 if not response.ok:
-                    raise ValueError(f"Request failed with status {response.status_code}: {response.text}")
+                    raise ValueError(
+                        f"Request failed with status {response.status_code}: {response.text}"
+                    )
                 data = response.json()
                 raw = data.get(result_path, [])
                 batch = self._extract_results(raw)
@@ -383,7 +403,9 @@ class BaseIngestor:
         """
         df = self.df
 
-        df = df.withColumn("_rowHash", sha2(concat_ws("||", *[col(c) for c in df.columns]), 256))
+        df = df.withColumn(
+            "_rowHash", sha2(concat_ws("||", *[col(c) for c in df.columns]), 256)
+        )
         df = df.withColumn("_processedTimestamp", current_timestamp())
         self.df = df
 
@@ -400,10 +422,17 @@ class BaseIngestor:
         Returns:
             Ingestor: The same instance (self) for method chaining.
         """
-        table_name = f"{self.layer}.{self.source_config['name']}_{self.dataset_config['name']}"
+        table_name = (
+            f"{self.layer}.{self.source_config['name']}_{self.dataset_config['name']}"
+        )
 
         jdbc_url = self.target.jdbc_url
         connection_properties = self.target.connection_properties
 
-        self.df.write.jdbc(url=jdbc_url, table=table_name, mode="overwrite", properties=connection_properties)
+        self.df.write.jdbc(
+            url=jdbc_url,
+            table=table_name,
+            mode="overwrite",
+            properties=connection_properties,
+        )
         return self
