@@ -100,3 +100,6 @@ venv/
 .spyderproject
 .spyproject
 .ropeproject
+
+# workspace
+trading-data-warehouse.workspace.json
